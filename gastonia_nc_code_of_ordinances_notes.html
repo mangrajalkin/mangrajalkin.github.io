@@ -4,31 +4,42 @@
 <style>
     body {
         display: block;
-        width: 50em;
+    }
+    @media not print {
+        body {
+            width: 50em;
+            padding-bottom: 10em;
+        }
+    }
+    p, header {
+        -webkit-margin-before: .55em;
+        -webkit-margin-after: .55em;
+    }
+    header {
+        text-decoration: underline;
+    }
+    @media not print {
+        b {
+            color: red;
+        }
+    }
+    body > header {
+        font-size: 1.75em;
+        -webkit-margin-before: .25em;
     }
     body > ul > li > header {
-        font-size: 2em;
+        font-size: 1.5em;
     }
     body > ul > li > ul > li > header {
-        font-size: 1.5em;
+        font-size: 1.33em;
     }
     body > ul > li > ul > li > ul > li > header {
         font-size: 1.17em;
     }
-    body > ul > li > ul > li > ul > li > ul > li > header {
-        font-size: 1.33em;
-    }
-    header {
-        -webkit-margin-before: 1em;
-        -webkit-margin-after: 1em;
-        text-decoration: underline;
-    }
-    b {
-        color: red;
-    }
 </style>
 </head>
 <body>
+<header>Excerpts from Code of Ordinances of Gastonia, NC</header>
 <ul>
     <li>
         <header>Chapter 16 - MINIMUM HOUSING STANDARDS AND BUILDING REGULATIONS</header>
@@ -250,24 +261,5 @@
         </ul>
     </li>
 </ul>
-<pre>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</pre>
 </body>
 </html>
