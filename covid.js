@@ -21,6 +21,10 @@
 				main = document.createElement('div'),
 				footer = document.createElement('footer'),
 				sourceLink = document.createElement('a'),
+				dataLink = document.createElement('a'),
+				params = new URLSearchParams(window.location.search.substring(1)),
+				stateParam = params.get('state') || 'All',
+				countyParam = params.get('county') || 'All',
 				chart = new Chart(canvas, {
 					type: 'line',
 					data: {
@@ -57,9 +61,13 @@
 			ui.style.flexDirection = 'column';
 			
 			header.style.display = 'flex';
+			selectState.style.margin = '1em';
 			selectState.id = 'state';
+			selectStateLabel.style.margin = '1em';
 			selectStateLabel.for = selectState.id;
+			selectCounty.style.margin = '1em';
 			selectCounty.id = 'county';
+			selectCountyLabel.style.margin = '1em';
 			selectCountyLabel.for = selectCounty.id;
 			
 			selectStateLabel.appendChild(document.createTextNode('Select State:'));
@@ -98,8 +106,8 @@
 			header.appendChild(selectCounty);
 			
 			generateDropdown(confirmed, selectState);
-			selectCountyLabel.style.visibility = 'hidden';
-			selectCounty.style.visibility = 'hidden';
+			selectCountyLabel.style.visibility = stateParam == 'All' ? 'hidden' : 'visible';
+			selectCounty.style.visibility = stateParam == 'All' ? 'hidden' : 'visible';
 			generateDropdown(confirmed.All, selectCounty);
 			
 			selectState.addEventListener('change', () => {
@@ -120,6 +128,12 @@
 				chart.setCovidData(selectState.value, selectCounty.value)
 			});
 			
+			footer.style.display = 'flex';
+			dataLink.style.margin = '1em';
+			dataLink.href = 'https://usafacts.org/';
+			dataLink.appendChild(document.createTextNode('Data provided by usafacts.org'));
+			footer.appendChild(dataLink);
+			sourceLink.style.margin = '1em';
 			sourceLink.href = 'https://github.com/mangrajalkin/mangrajalkin.github.io/tree/master';
 			sourceLink.appendChild(document.createTextNode('View Source'));
 			footer.appendChild(sourceLink);
@@ -131,17 +145,22 @@
 			ui.appendChild(footer);
 			document.body.style.margin = '0';
 			document.body.appendChild(ui);
-			chart.setCovidData = function (displayRegion, drillDown) {
-				this.data.datasets[0].data = confirmed[displayRegion][drillDown];
-				this.data.datasets[1].data = deaths[displayRegion][drillDown];
-				this.options.title.text[1] = displayRegion + ' ' + drillDown;
+			chart.setCovidData = function (state, county) {
+				this.data.datasets[0].data = confirmed[state][county];
+				this.data.datasets[1].data = deaths[state][county];
+				this.options.title.text[1] = state + ' ' + county;
 				document.title = this.options.title.text.join(' - ');
 				this.update();
 				this.resize();
-				return this;
+				params.set('state', state);
+				params.set('county', county);
+				window.history.replaceState(null, '', window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + params.toString());
 			};
+			selectState.value = stateParam;
+			selectCounty.value = countyParam;
+			chart.setCovidData(stateParam, countyParam);
 			return chart;
-		}).then(chart => chart.setCovidData('All', 'All'));
+		});
 })(function(url) {
 	const
 		decoder = new TextDecoder('utf-8'),
@@ -236,4 +255,4 @@
 				}
 			}
 		));
-})
+});
