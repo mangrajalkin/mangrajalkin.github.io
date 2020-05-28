@@ -20,6 +20,7 @@
 				selectCountyLabel = document.createElement('label'),
 				main = document.createElement('div'),
 				footer = document.createElement('footer'),
+				sourceLink = document.createElement('a'),
 				chart = new Chart(canvas, {
 					type: 'line',
 					data: {
@@ -118,6 +119,10 @@
 				const selected = selectCounty.value;
 				chart.setCovidData(selectState.value, selectCounty.value)
 			});
+			
+			sourceLink.href = 'https://github.com/mangrajalkin/mangrajalkin.github.io/tree/master';
+			sourceLink.appendChild(document.createTextNode('View Source'));
+			footer.appendChild(sourceLink);
 			
 			main.style.flex = '1';
 			main.appendChild(canvas);
@@ -231,4 +236,4 @@
 				}
 			}
 		));
-});
+})
